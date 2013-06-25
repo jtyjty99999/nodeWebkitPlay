@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	.titlebar{
+	-webkit-user-select:none;
+	-webkit-app-region:drag
+	}
+	.result{
+	border: 3px solid #000;
+	border-radius:10px;
+	box-shadow:1px 2px 2px #fff;
+	height:150px
+	}
+	.w100{
+	width:100px
+	}
+	body{
+	padding:20px;
+	padding-top: 50px;
+    background-image: url(blueprint.png);
+    background-color: #f2f2f2;
+    font-family: "Microsoft YaHei"
+	}
+	</style>
+</head>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<body>
+<div class="container">
+	<div class="row-fluid">
+	  <div class="span12">
+		  <div>
+		  <fieldset>
+			<legend>嫌弃记录仪</legend>
+<table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>嫌弃方式</th>
+                  <th>嫌弃次数</th>
+                  <th>增加一次嫌弃</th>
+                </tr>
+              </thead>
+              <tbody id="dataBody">
+
+              </tbody>
+            </table>
+			<div id="headerBox"></div>
+			<button id="addHeader" class="btn btn-small btn-primary">添加新的嫌弃</button>
+		<button id="store" class="btn btn-large btn-primary">保存到嫌弃数据库</button>
+		  </fieldset>
+		</div>
+	  </div>
+	</div>
+</div>
+
+
+
+
+	
+	<script>
+	
+	var tpl ='{@each list as it,k}\
+	<tr class="info">\
+                 <td>${k}</td>\
+                  <td class="name">${it.name}</td>\
+                  <td class="num">${it.num}</td>\
+                 <td><button class="addNew" class="btn btn-small btn-primary">增加</button></td>\
+                </tr>\
+				{@/each}';
+	var store ='';
+	var fs = require('fs'), url = require('url'),juicer = require('juicer');
+	fs.readFile('db.json','utf8',function (err,result) {
+				if (err)
+					throw err;
+					store = eval('('+result+')');
+					var html = juicer(tpl,store);
+					$('#dataBody').html(html)
+			});
+	
+	
+$(document).delegate('#addHeader','click',function(){
+
+var tpl = '<tr class="info">\
+                 <td></td>\
+                  <td class="newName"><input type = "text"></td>\
+                  <td class="newNum"><input type = "text"></td>\
+                 <td><button class="addNew" class="btn btn-small btn-primary">增加</button></td>\
+                </tr>'
+$('#dataBody').append(tpl);
+})
+$(document).delegate('.addNew','click',function(){
+var $source =$(this).parent().prev()
+$(this).parent().prev().text(+1)
+})
+
+$(document).delegate('#store','click',function(){
+var $parent = $('#dataBody').find('tr');
+var name, num;
+store['list']=[];
+for (var i = 0, l = $parent.length; i < l; i++) {
+	var isNew = $($parent[i]).find('td.newName');
+	if (isNew.length !== 0) {
+		name = isNew.children('input').val();
+		num = isNew.next().children('input').val();
+	} else {
+		name = $($parent[i]).find('td.name').text();
+		num = $($parent[i]).find('td.num').text();
+	}
+store['list'].push({'name':name,'num':num})
+	}
+	fs.writeFile('db.json',JSON.stringify(store),function (err,result) {
+				if (err)
+					throw err;
+					alert('存泥煤啊存');
+			});
+
+})
+
+	</script>
+</body>
+</html>
