@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<body>
+<div class="container">
+	<div class="row-fluid">
+		<div class="span12"><button id="open" class="btn btn-primary">打开文件</button></div>
+	</div>
+</div>
+<input style="display:none;" id="openFile" type="file" />
+	
+	<script>
+	
+	var chokidar = require('chokidar');
+
+var watcher = chokidar.watch('file or dir', {ignored: /^\./, persistent: true});
+
+watcher
+.on('add', function (path) {
+	console.log('File', path, 'has been added');
+})
+.on('change', function (path) {
+	console.log('File', path, 'has been changed');
+	//ref.close();
+	//ref.history.go(0) 
+    //ref.location.reload() 
+    ref.location=ref.location 
+    //ref.location.assign(ref.location) 
+    //ref.location.replace(ref.location) 
+	
+})
+.on('unlink', function (path) {
+	console.log('File', path, 'has been removed');
+})
+.on('error', function (error) {
+	console.error('Error happened', error);
+})
+
+// 'add' and 'change' events also receive stat() results as second argument.
+// http://nodejs.org/api/fs.html#fs_class_fs_stats
+watcher.on('change', function(path, stats) {
+  console.log('File', path, 'changed size to', stats.size);
+});
+	
+	var ref;
+  $('#open').on("click", function(){
+  $("#openFile").trigger("click");
+  });
+	
+	
+  $("#openFile").change(function(evt) {
+      var x = window.screenX + 10;
+    var y = window.screenY + 10;
+    ref = window.open($(this).val(), '_blank', 'screenX=' + x + ',screenY=' + y);
+	watcher.add($(this).val());
+  });
+
+
+
+
+
+	</script>
+</body>
+</html>
