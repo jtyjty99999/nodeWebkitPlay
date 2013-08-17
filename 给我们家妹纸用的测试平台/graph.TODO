@@ -1,0 +1,23 @@
+工具界面:
+ ✔ 添加删除测试步骤
+ ✔ 设定测试方式(执行shell，执行sql，执行redis，发送getpost请求)与相关参数，显示执行结果
+ ✔ 导出测试步骤与结果为excel文件或者其他文件类型
+
+底层实现:
+ ✔ ssh连接远程系统
+ ✔ 执行远程脚本
+ ✔ 发送getpost请求封装
+ ✔ redis的smember，hget封装
+ ✔ 执行sql
+ 
+技术参考:
+ssh:
+http://blog.csdn.net/do_it__/article/details/7852134
+http://www.linuxproblem.org/art_9.html
+http://remysharp.com/2007/01/22/ssh-without-a-password/
+http://stackoverflow.com/questions/16114897/how-to-ssh-into-a-server-from-a-node-js-application
+http://stackoverflow.com/questions/5180981/ssh-client-for-node-js
+
+node excel
+
+http://stackoverflow.com/questions/17450412/how-to-create-an-excel-file-with-nodejs

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	.titlebar{
+	-webkit-user-select:none;
+	-webkit-app-region:drag
+	}
+	.result{
+	border: 3px solid #000;
+	border-radius:10px;
+	box-shadow:1px 2px 2px #fff;
+	height:150px
+	}
+	.w100{
+	width:100px
+	}
+	body{
+	padding:20px;
+	padding-top: 50px;
+    background-image: url(blueprint.png);
+    background-color: #f2f2f2;
+    font-family: "Microsoft YaHei"
+	}
+	</style>
+</head>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<body>
+<div class="container">
+	<div class="row-fluid">
+	  <div class="span4">
+		  <div>
+		  <fieldset>
+			<legend>发送Get请求</legend>
+			<label>host
+			<input type="text" name="" id="host"></label>
+			<label>port
+			<input type="text" name="" id="port"></label>
+			<label>path
+			<input type="text" name="" id="path"></label>
+		<button id="getGo" class="btn btn-large btn-primary">发送</button>
+		  </fieldset>
+		</div>
+	  </div>
+	  <div class="span8"><div id="result" class="result">hello world</div></div>
+	</div>
+</div>
+<div class="container">
+	<div class="row-fluid">
+	  <div class="span4">
+		  <div>
+		  <fieldset>
+			<legend>发送Post请求</legend>
+			<label>host
+			<input type="text" name="" id="postHost"></label>
+						<label>port
+			<input type="text" name="" id="postPort"></label>
+			<label>path
+			<input type="text" name="" id="postPath"></label>
+			<label>数据
+			<textarea rows="3"id="postData"></textarea>
+			</label>
+			<div id="headerBox"></div>
+			<button id="addHeader" class="btn btn-small btn-primary">添加header</button>
+		<button id="postGo" class="btn btn-large btn-primary">发送</button>
+		  </fieldset>
+		</div>
+	  </div>
+	  <div class="span8"><div id="postResult" class="result">hello world</div></div>
+	</div>
+</div>
+
+
+
+
+	
+	<script>
+
+	var postData = require('./lib/postdata'),
+	getData = require('./lib/getdata').getData;
+	var fs = require('fs'), url = require('url');
+$('#getGo').on('click',function(){
+
+	var option = { //get的参数在这里改，包括服务器，端口，路径
+		host : $('#host').val(),
+		port : $('#port').val(),
+		path : $('#path').val(),
+		method : 'get',
+	}
+	getData(option, function (result) {
+		alert('发送成功,返回数据已经显示到右边区域');
+		document.getElementById('result').innerHTML = result
+			fs.writeFile('message.txt', result, function (err) {
+				if (err)
+					throw err;
+				console.log('It\'s saved!');
+			});
+	})
+})
+
+		
+
+$('#postGo').on('click', function () {
+
+	var conf = { 
+		host : $('#postHost').val(),
+		port : $('#postPort').val(),
+		path : $('#postPath').val(),
+		headers:{}
+	};
+	
+	var data = $('#postData').val();
+	var headerNames = $('#headerBox').find('.headerName');
+	var headerTexts = $('#headerBox').find('.headerText');
+	for(var i = 0,l=headerNames.length;i<l;i++){
+	conf.headers[headerNames[i].value.toString()]=headerTexts[i].value.toString();
+	}
+	console.log(conf)
+	postData.send(data, conf, function (result) {
+		alert('发送成功,返回数据已经显示到右边区域');
+		document.getElementById('postResult').innerHTML = result
+	})
+
+})
+$('#addHeader').on('click', function () {
+var html = '<label>头名称<input type="text" name="" class="headerName"></label><label>头内容<input type="text" name="" class="headerText"></label>'
+	$('#headerBox').append(html)
+})
+
+
+
+
+	</script>
+</body>
+</html>
