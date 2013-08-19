@@ -33,7 +33,8 @@ mysqlOrm.prototype = {
     exec:function (statement, callback) {
         if (this.connection) {
             this.connection.query(statement, function (err, rows, fields) {
-                if (err) throw err;
+                if (err) {throw err;
+				callback(error)};
                 callback(rows, fields)
             });
         } else {

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	.titlebar{
+	-webkit-user-select:none;
+	-webkit-app-region:drag
+	}
+	.result{
+	border: 3px solid #000;
+	border-radius:10px;
+	box-shadow:1px 2px 2px #fff;
+	height:150px
+	}
+	.w100{
+	width:100px
+	}
+	body{
+	padding:20px;
+	padding-top: 50px;
+    background-image: url(blueprint.png);
+    background-color: #f2f2f2;
+    font-family: "Microsoft YaHei"
+	}
+	</style>
+</head>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<body>
+<div class="container">
+	<div class="row-fluid">
+	  <div class="span4">
+		  <div>
+		  <fieldset>
+			<legend>发送Get请求</legend>
+			<label>host
+			<input type="text" name="" id="host"></label>
+			<label>user
+			<input type="text" name="" id="port"></label>
+						<label>password
+			<input type="text" name="" id="password"></label>
+						<label>database
+			<input type="text" name="" id="db"></label>
+			<label>sql
+			<input type="text" name="" id="sql" value="select * from where ="></label>
+		<button id="getGo" class="btn btn-large btn-primary">发送</button>
+		  </fieldset>
+		</div>
+	  </div>
+	  <div class="span8"><div id="result" class="result">hello world</div></div>
+	</div>
+</div>
+
+
+
+
+	
+	<script>
+
+	var db = require('./lib/db'),
+	var fs = require('fs'), url = require('url');
+	
+$('#getGo').on('click',function(){
+
+	var option = { //get的参数在这里改，包括服务器，端口，路径
+		host : $('#host').val(),
+		user : $('#user').val(),
+		password : $('#password').val(),
+		database : $('#database').val(),
+	}
+	
+	var query = new db.orm(option);
+	query.exec(sql,function(result){
+	$('#result').html(result);
+	})
+
+})
+
+		
+
+
+	</script>
+</body>
+</html>
